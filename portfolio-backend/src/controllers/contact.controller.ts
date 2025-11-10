@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { GoogleSheetsService } from '../services/sheets.service';
+import emailService from '../services/email.service';
 import type { ContactFormData } from '../middlewares/validation.middleware';
 
 let sheetsServiceInstance: GoogleSheetsService | null = null;
@@ -25,6 +26,17 @@ export const submitContactForm = async (req: Request, res: Response) => {
     
     // Save to Google Sheets
     await sheetsService.saveMessage(formData);
+    
+    // Send email notification (non-blocking)
+    emailService.sendContactNotification({
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+      timestamp: new Date().toISOString(),
+    }).catch(err => {
+      console.error('Failed to send email notification:', err);
+      // Don't fail the request if email fails
+    });
 
     res.status(200).json({
       success: true,
