@@ -9,10 +9,20 @@ const sheetsScopes = ['https://www.googleapis.com/auth/spreadsheets'];
 
 const getSheetsClient = async () => {
   const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, '\n');
+  let privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY;
 
   if (!clientEmail || !privateKey) {
     throw new Error('Google service account credentials are not configured.');
+  }
+
+  // Handle different private key formats
+  // Remove quotes if present
+  privateKey = privateKey.replace(/^["']|["']$/g, '');
+  // Replace literal \n with actual newlines
+  privateKey = privateKey.replace(/\\n/g, '\n');
+  // Ensure proper formatting
+  if (!privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+    throw new Error('Invalid private key format');
   }
 
   const auth = new google.auth.JWT({

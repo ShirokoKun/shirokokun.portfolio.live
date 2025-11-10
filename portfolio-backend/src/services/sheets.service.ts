@@ -42,10 +42,22 @@ export class GoogleSheetsService {
     }
 
     try {
+      // Handle different private key formats
+      let formattedKey = privateKey;
+      // Remove quotes if present
+      formattedKey = formattedKey.replace(/^["']|["']$/g, '');
+      // Replace literal \n with actual newlines
+      formattedKey = formattedKey.replace(/\\n/g, '\n');
+      
+      // Validate key format
+      if (!formattedKey.includes('-----BEGIN PRIVATE KEY-----')) {
+        throw new Error('Invalid private key format');
+      }
+
       // Initialize Google Auth
       const auth = new google.auth.JWT({
         email: clientEmail,
-        key: privateKey.replace(/\\n/g, '\n'), // Handle escaped newlines
+        key: formattedKey,
         scopes: ['https://www.googleapis.com/auth/spreadsheets'],
       });
 
