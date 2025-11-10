@@ -1,0 +1,41 @@
+# Root level gitignore for portfolio monorepo
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment files
+.env
+.env.local
+.env*.local
+
+# Development files
+*.log
+*.log.*
+
+# Test files
+test-*.js
+*-test.js
+
+# Documentation (remove if you want to keep)
+PORTFOLIO_LIVE.md
+SYSTEM_STATUS.md
+DEPLOYMENT_INSTRUCTIONS.md
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Build outputs
+dist/
+build/
+.next/
+out/
