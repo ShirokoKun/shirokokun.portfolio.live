@@ -38,16 +38,25 @@ const saveCachedPosts = (posts: SubstackPost[]) => {
   }
 };
 
-// Fetch posts from backend API
+// Fetch posts from backend API (with fallback to frontend API)
 const fetchPostsFromAPI = async (): Promise<SubstackPost[]> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
   
+  // Try backend first, fallback to frontend API route
   const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
-  console.log('🔍 Fetching from backend:', backendUrl);
+  const urls = [
+    `${backendUrl}/api/blog/posts`, // Backend API
+    '/api/blog/posts' // Frontend API fallback
+  ];
   
-  try {
-    const response = await fetch(`${backendUrl}/api/blog/posts`, {
+  console.log('🔍 Fetching from:', urls[0]);
+  
+  let lastError: Error | null = null;
+  
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, {
       cache: 'no-store',
       signal: controller.signal,
       headers: {
@@ -68,17 +77,24 @@ const fetchPostsFromAPI = async (): Promise<SubstackPost[]> => {
     console.log('📝 Posts count:', data.posts?.length || 0);
     
     if (data.posts && Array.isArray(data.posts) && data.posts.length > 0) {
+      clearTimeout(timeoutId);
       return data.posts;
     }
     throw new Error('No posts found in response');
-  } catch (err) {
-    clearTimeout(timeoutId);
-    console.error('❌ Fetch error:', err);
-    if (err instanceof Error && err.name === 'AbortError') {
-      throw new Error('Request timeout');
+    } catch (err) {
+      clearTimeout(timeoutId);
+      lastError = err instanceof Error ? err : new Error(String(err));
+      console.error(`❌ Failed to fetch from ${url}:`, lastError.message);
+      // Continue to next URL
     }
-    throw err;
   }
+  
+  // If all URLs failed, throw the last error
+  console.error('❌ All fetch attempts failed');
+  if (lastError) {
+    throw lastError;
+  }
+  throw new Error('Failed to fetch blog posts from all sources');
 };
 
 export default function SubstackBlog() {
