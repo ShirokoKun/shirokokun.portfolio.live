@@ -2,9 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = 'http://localhost:3000/api/spotify/callback';
+
+// Get the correct redirect URI based on environment
+function getRedirectUri(req: NextRequest): string {
+  const url = req.nextUrl;
+  const baseUrl = `${url.protocol}//${url.host}`;
+  return `${baseUrl}/api/spotify/callback`;
+}
 
 export async function GET(request: NextRequest) {
+  const REDIRECT_URI = getRedirectUri(request);
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get('code');
 

@@ -10,16 +10,18 @@ import blogRouter from './routes/blog.routes';
 import contactRouter from './routes/contact.routes';
 import mindscapeRouter from './routes/mindscape.routes';
 
-// Load environment variables with explicit path
-const envPath = path.join(__dirname, '../.env');
-console.log('🔍 Loading .env from:', envPath);
-console.log('🔍 __dirname is:', __dirname);
-const result = dotenv.config({ path: envPath });
-if (result.error) {
-  console.error('❌ Error loading .env:', result.error);
+// Load environment variables (development only)
+if (process.env.NODE_ENV !== 'production') {
+  const envPath = path.join(__dirname, '../.env');
+  console.log('🔍 Loading .env from:', envPath);
+  const result = dotenv.config({ path: envPath });
+  if (result.error) {
+    console.warn('⚠️  No .env file found (this is OK in production)');
+  } else {
+    console.log('✅ .env loaded successfully');
+  }
 } else {
-  console.log('✅ .env loaded successfully');
-  console.log('✅ PORT from env:', process.env.PORT);
+  console.log('🚀 Production mode: Using environment variables from Railway');
 }
 
 // Initialize Express app
