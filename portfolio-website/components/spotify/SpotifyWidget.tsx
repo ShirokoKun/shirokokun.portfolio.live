@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Music2 } from 'lucide-react';
 import NowPlaying from './NowPlaying';
 import LastPlayed from './LastPlayed';
-import { useSpotify } from '@/hooks/useSpotify';
+import { useSpotifyEnhanced } from '@/hooks/useSpotifyEnhanced';
 
 interface SpotifyWidgetProps {
   className?: string;
@@ -20,8 +20,8 @@ const formatTime = (ms?: number): string => {
 };
 
 export default function SpotifyWidget({ className = '' }: SpotifyWidgetProps) {
-  // Fetch Spotify data with 10-second refresh for real-time updates
-  const { track, isLoading, error } = useSpotify(10000);
+  // Fetch Spotify data with smart polling (10s visible, 60s hidden)
+  const { track, isLoading, error, isVisible } = useSpotifyEnhanced(10000);
 
   return (
     <motion.div
@@ -51,10 +51,16 @@ export default function SpotifyWidget({ className = '' }: SpotifyWidgetProps) {
           </div>
           <div>
             <h2 className="text-lg font-bold text-white">
-              {track?.isPlaying ? '🎵 Now Playing' : '🎧 Spotify'}
+              {track?.isPlaying ? '🎵 Now Playing' : track?.title ? '🕒 Last Played' : '🎧 Spotify'}
             </h2>
             <p className="text-xs text-zinc-500">
-              {track?.isPlaying ? 'Live from Spotify' : isLoading ? 'Loading...' : 'Not playing'}
+              {track?.isPlaying 
+                ? 'Live from Spotify' 
+                : isLoading 
+                ? 'Loading...' 
+                : track?.timeAgo
+                ? track.timeAgo
+                : 'Not playing'}
             </p>
           </div>
         </div>
@@ -108,6 +114,22 @@ export default function SpotifyWidget({ className = '' }: SpotifyWidgetProps) {
               currentTime={formatTime(track.progress)}
             />
           </motion.div>
+        ) : track?.title ? (
+          <motion.div
+            key="last-played"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+          >
+            <LastPlayed
+              songName={track.title}
+              artistName={track.artist || 'Unknown Artist'}
+              albumArt={track.albumImageUrl || '/images/placeholder-album.svg'}
+              playedAt={track.timeAgo || 'Recently'}
+              spotifyUrl={track.songUrl}
+            />
+          </motion.div>
         ) : (
           <motion.div
             key="not-playing"
@@ -131,7 +153,8 @@ export default function SpotifyWidget({ className = '' }: SpotifyWidgetProps) {
         className="mt-6 pt-4 border-t border-zinc-800/50"
       >
         <p className="text-xs text-zinc-600 text-center">
-          Powered by Spotify API • Updates every 10s
+          Powered by Spotify API • Updates every {isVisible ? '10s' : '60s'}
+          {!isVisible && ' (tab hidden)'}
         </p>
       </motion.div>
     </motion.div>

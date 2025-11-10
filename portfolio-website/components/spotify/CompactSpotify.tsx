@@ -1,9 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Music2 } from 'lucide-react';
+import { Music2, Clock } from 'lucide-react';
 import Image from 'next/image';
-import { useSpotify } from '@/hooks/useSpotify';
+import { useSpotifyEnhanced } from '@/hooks/useSpotifyEnhanced';
 
 // Helper function to format time
 const formatTime = (ms?: number): string => {
@@ -15,8 +15,8 @@ const formatTime = (ms?: number): string => {
 };
 
 export default function CompactSpotify() {
-  // Fetch Spotify data with 10-second refresh for real-time updates
-  const { track, isLoading } = useSpotify(10000);
+  // Fetch Spotify data with smart polling (10s visible, 60s hidden)
+  const { track, isLoading } = useSpotifyEnhanced(10000);
 
   if (isLoading) {
     return (
@@ -123,8 +123,11 @@ export default function CompactSpotify() {
           <p className="text-xs text-gray-400 truncate">
             {artistName}
           </p>
-          {!isPlaying && (
-            <p className="text-xs text-gray-600 mt-0.5">Not playing</p>
+          {!isPlaying && track?.timeAgo && (
+            <div className="flex items-center gap-1 mt-0.5">
+              <Clock className="w-3 h-3 text-gray-600" />
+              <p className="text-xs text-gray-600">{track.timeAgo}</p>
+            </div>
           )}
         </div>
       </div>
