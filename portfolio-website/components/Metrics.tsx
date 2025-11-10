@@ -100,22 +100,23 @@ const Metrics = () => {
   // No additional state needed as we're using the single 'animate' state
 
   return (
-    <section className="py-12 md:py-16 px-4 md:px-8 max-w-7xl mx-auto glass-card" id="metrics">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center mb-12"
-      >
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-white">Skills & Metrics</h2>
-        <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto px-4">
-          A data-driven overview of my creative journey and technical expertise.
-        </p>
-      </motion.div>
+    <section className="py-12 md:py-24 px-4 md:px-8" id="metrics">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-6 text-white">Skills & Metrics</h2>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            A data-driven overview of my creative journey and technical expertise.
+          </p>
+        </motion.div>
 
-      <div
-        className="p-6 md:p-8 mb-8 glass-surface rounded-xl"
-      >
+        <div
+          className="glass-card p-6 md:p-8"
+        >
         <div className="flex flex-wrap justify-center gap-4 mb-8">
           <button
             onClick={() => setActiveTab('overview')}
@@ -237,6 +238,7 @@ const Metrics = () => {
             </div>
           </motion.div>
         )}
+        </div>
       </div>
     </section>
   );

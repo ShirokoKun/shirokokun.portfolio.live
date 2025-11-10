@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Bio from '@/components/Bio';
+import ToolsAndJourney from '@/components/ToolsAndJourney';
 import Metrics from '@/components/Metrics';
-import Projects from '@/components/Projects';
-import About from '@/components/About';
+import ProjectsAndSkills from '@/components/ProjectsAndSkills';
 import ArtworkGallery from '@/components/ArtworkGallery';
 import BlogTeaser from '@/components/BlogTeaser';
 import Contact from '@/components/Contact';
@@ -39,9 +39,9 @@ export default function Home() {
       <main>
         <Hero />
         <Bio />
+        <ToolsAndJourney />
         <Metrics />
-        <Projects />
-        <About />
+        <ProjectsAndSkills />
         <ArtworkGallery />
         <BlogTeaser />
         <Contact />

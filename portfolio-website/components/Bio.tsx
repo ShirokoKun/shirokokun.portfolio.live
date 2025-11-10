@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useRef, useEffect, useState, useMemo } from 'react';
-import { MapPin, Calendar, Coffee } from 'lucide-react';
+import { MapPin, Calendar, Coffee, ChevronDown, ChevronUp } from 'lucide-react';
 import { PERSONAL_INFO, PROFILE_IMAGE } from '@/constants/personal';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Import real brand icons from react-icons
 import { 
@@ -127,6 +128,7 @@ const ProfileImage = () => {
 
 export default function Bio() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -178,16 +180,40 @@ export default function Bio() {
                 festivals, and internships.
               </p>
               
-              <p className="text-gray-400">
-                For me, creativity is not just about aesthetics but about systems, emotions, and connection. Whether I&apos;m 
-                designing an interface, editing a film, or building a brand identity, I focus on blending clarity with 
-                character — minimal design with bold accents, professional with personal. My goal is to bridge technology, 
-                storytelling, and design into experiences that feel immersive, interactive, and human.
-              </p>
+              <AnimatePresence>
+                {isExpanded && (
+                  <motion.p 
+                    className="text-gray-400"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    For me, creativity is not just about aesthetics but about systems, emotions, and connection. Whether I&apos;m 
+                    designing an interface, editing a film, or building a brand identity, I focus on blending clarity with 
+                    character — minimal design with bold accents, professional with personal. My goal is to bridge technology, 
+                    storytelling, and design into experiences that feel immersive, interactive, and human.
+                  </motion.p>
+                )}
+              </AnimatePresence>
+
+              {/* Read More Button */}
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="inline-flex items-center gap-2 px-4 py-2 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 group"
+              >
+                <span className="text-sm font-medium">{isExpanded ? 'Read Less' : 'Read More'}</span>
+                <motion.div
+                  animate={{ rotate: isExpanded ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ChevronDown size={16} className="group-hover:translate-y-0.5 transition-transform" />
+                </motion.div>
+              </button>
             </div>
 
             {/* Highlights */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
               {highlights.map((highlight, index) => (
                 <div 
                   key={index}
@@ -199,78 +225,8 @@ export default function Bio() {
               ))}
             </div>
 
-            {/* Tools I Use */}
-            <div className="bg-zinc-900/30 p-6 rounded-2xl border border-zinc-800 mb-6">
-              <h4 className="text-lg font-semibold text-white mb-6 text-center">Tools I Use</h4>
-              
-              {/* Design Tools */}
-              <div className="mb-6">
-                <h5 className="text-sm font-medium text-gray-400 mb-3 text-left">Design & Creative</h5>
-                <div className="flex flex-wrap gap-3">
-                  {designTools.map((tool, index) => (
-                    <div 
-                      key={index}
-                      className="group relative w-12 h-12 bg-zinc-800/50 rounded-xl border border-zinc-700 hover:border-zinc-500 hover:bg-zinc-700/50 transition-all duration-300 hover:scale-110 hover:-translate-y-1 cursor-pointer"
-                      title={tool.name}
-                    >
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <tool.icon className="w-6 h-6 text-gray-300 group-hover:text-white transition-colors duration-300" />
-                      </div>
-                      {/* Tooltip */}
-                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
-                        {tool.name}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Development Tools */}
-              <div className="mb-6">
-                <h5 className="text-sm font-medium text-gray-400 mb-3 text-left">Development</h5>
-                <div className="flex flex-wrap gap-3">
-                  {devTools.map((tool, index) => (
-                    <div 
-                      key={index}
-                      className="group relative w-12 h-12 bg-zinc-800/50 rounded-xl border border-zinc-700 hover:border-zinc-500 hover:bg-zinc-700/50 transition-all duration-300 hover:scale-110 hover:-translate-y-1 cursor-pointer"
-                      title={tool.name}
-                    >
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <tool.icon className="w-6 h-6 text-gray-300 group-hover:text-white transition-colors duration-300" />
-                      </div>
-                      {/* Tooltip */}
-                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
-                        {tool.name}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* AI & Automation Tools */}
-              <div>
-                <h5 className="text-sm font-medium text-gray-400 mb-3 text-left">AI & Automation</h5>
-                <div className="flex flex-wrap gap-3">
-                  {aiTools.map((tool, index) => (
-                    <div 
-                      key={index}
-                      className="group relative w-12 h-12 bg-zinc-800/50 rounded-xl border border-zinc-700 hover:border-zinc-500 hover:bg-zinc-700/50 transition-all duration-300 hover:scale-110 hover:-translate-y-1 cursor-pointer"
-                      title={tool.name}
-                    >
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <tool.icon className="w-6 h-6 text-gray-300 group-hover:text-white transition-colors duration-300" />
-                      </div>
-                      {/* Tooltip */}
-                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
-                        {tool.name}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
             {/* CTA Button */}
-            <div className="pt-4">
+            <div className="pt-6">
               <a 
                 href="#contact"
                 className="inline-flex items-center gap-2 bg-white text-black px-8 py-4 rounded-full font-medium hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"

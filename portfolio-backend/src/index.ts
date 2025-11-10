@@ -8,6 +8,7 @@ import { rateLimiter } from './middlewares/rate-limit.middleware';
 import { requestLogger } from './middlewares/logger.middleware';
 import blogRouter from './routes/blog.routes';
 import contactRouter from './routes/contact.routes';
+import mindscapeRouter from './routes/mindscape.routes';
 
 // Load environment variables with explicit path
 const envPath = path.join(__dirname, '../.env');
@@ -57,6 +58,7 @@ app.get('/health', (_req: Request, res: Response) => {
 // API routes
 app.use('/api/blog', blogRouter);
 app.use('/api/contact', contactRouter);
+app.use('/api/mindscape', mindscapeRouter);
 
 // Root endpoint
 app.get('/', (_req: Request, res: Response) => {
@@ -71,6 +73,10 @@ app.get('/', (_req: Request, res: Response) => {
       },
       contact: {
         submit: 'POST /api/contact',
+      },
+      mindscape: {
+        public: 'GET /api/mindscape/public',
+        all: 'GET /api/mindscape/admin/all (admin only)',
       },
     },
   });

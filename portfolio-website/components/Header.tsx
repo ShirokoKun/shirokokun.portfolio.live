@@ -100,11 +100,6 @@ export default function Header() {
                   </a>
                 </motion.li>
                 <motion.li whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
-                  <a href="/#about" className="font-medium text-white hover:text-white hover:bg-white/10 px-4 py-2 rounded-full bg-black/20 inline-block transition-all">
-                    About
-                  </a>
-                </motion.li>
-                <motion.li whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
                   <Link href="/projects" className="font-medium text-white hover:text-white hover:bg-white/10 px-4 py-2 rounded-full bg-black/20 inline-block transition-all">
                     Projects
                   </Link>
@@ -112,6 +107,11 @@ export default function Header() {
                 <motion.li whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
                   <Link href="/blog" className="font-medium text-white hover:text-white hover:bg-white/10 px-4 py-2 rounded-full bg-black/20 inline-block transition-all">
                     Blog
+                  </Link>
+                </motion.li>
+                <motion.li whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+                  <Link href="/myspace" className="font-medium text-white hover:text-white hover:bg-white/10 px-4 py-2 rounded-full bg-black/20 inline-block transition-all">
+                    MySpace
                   </Link>
                 </motion.li>
               </ul>
@@ -160,15 +160,6 @@ export default function Header() {
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="/#about" 
-                    className="font-medium text-white hover:text-white block py-2 px-4 rounded-lg hover:bg-white/5 transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    About
-                  </a>
-                </li>
-                <li>
                   <Link 
                     href="/projects" 
                     className="font-medium text-white hover:text-white block py-2 px-4 rounded-lg hover:bg-white/5 transition-colors"
@@ -184,6 +175,15 @@ export default function Header() {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Blog
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/myspace" 
+                    className="font-medium text-white hover:text-white block py-2 px-4 rounded-lg hover:bg-white/5 transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    MySpace
                   </Link>
                 </li>
                 <li>

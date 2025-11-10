@@ -1,41 +1,130 @@
 # Root level gitignore for portfolio monorepo
 
-# Dependencies
-node_modules/
-package-lock.json
-
-# Environment files
+# ============================================
+# Environment & Credentials (NEVER COMMIT!)
+# ============================================
 .env
 .env.local
 .env*.local
+*.env
+!.env.example
 
-# Development files
+# ============================================
+# Dependencies
+# ============================================
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ============================================
+# Build Outputs
+# ============================================
+dist/
+build/
+.next/
+out/
+.vercel/
+.turbo/
+
+# ============================================
+# Development Files
+# ============================================
 *.log
 *.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Test files
+# ============================================
+# Testing
+# ============================================
+coverage/
+.nyc_output/
 test-*.js
 *-test.js
+*.test.ts
+*.spec.ts
 
-# Documentation (remove if you want to keep)
+# ============================================
+# Documentation (Optional - Remove if needed)
+# ============================================
 PORTFOLIO_LIVE.md
 SYSTEM_STATUS.md
 DEPLOYMENT_INSTRUCTIONS.md
+ABOUT_SECTION_REDESIGN.md
+MYSPACE_PROGRESS.md
+TOOLS_AND_JOURNEY_SECTION.md
+TEST_CHECKLIST.md
+ALL_FIXES_SUMMARY.md
+FILES_UPDATED_LIST.md
+FIX_*.md
+RECENT_CHANGES.md
 
-# OS files
+# ============================================
+# Development Scripts (Optional)
+# ============================================
+start-*.bat
+start-*.ps1
+stop-*.bat
+stop-*.ps1
+format-key-for-vercel.js
+
+# ============================================
+# OS Files
+# ============================================
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 *.swp
 *.swo
 *~
 
-# IDE
+# ============================================
+# IDE & Editor
+# ============================================
 .vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea/
 *.sublime-*
+*.sublime-project
+*.sublime-workspace
 
-# Build outputs
-dist/
-build/
-.next/
-out/
+# ============================================
+# Python (if using any Python scripts)
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+venv/
+ENV/
+
+# ============================================
+# Temporary Files
+# ============================================
+*.tmp
+*.temp
+.cache/
+.temp/
+
+# ============================================
+# Backend Specific
+# ============================================
+portfolio-backend/.env
+portfolio-backend/dist/
+
+# ============================================
+# Frontend Specific
+# ============================================
+portfolio-website/.env.local
+portfolio-website/.next/
+portfolio-website/out/
+portfolio-website/.vercel/
