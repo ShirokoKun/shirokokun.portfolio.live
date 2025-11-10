@@ -15,8 +15,8 @@ const formatTime = (ms?: number): string => {
 };
 
 export default function CompactSpotify() {
-  // Fetch Spotify data with 30-second refresh
-  const { track, isLoading } = useSpotify(30000);
+  // Fetch Spotify data with 10-second refresh for real-time updates
+  const { track, isLoading } = useSpotify(10000);
 
   if (isLoading) {
     return (

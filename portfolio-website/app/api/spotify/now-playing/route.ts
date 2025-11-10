@@ -36,15 +36,26 @@ const getNowPlaying = async () => {
 
 export async function GET() {
   try {
+    // Validate environment variables
+    if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REFRESH_TOKEN) {
+      console.error('Missing Spotify credentials');
+      return NextResponse.json(
+        { isPlaying: false, error: 'Spotify credentials not configured' },
+        { status: 500 }
+      );
+    }
+
     const response = await getNowPlaying();
 
     if (response.status === 204 || response.status > 400) {
+      console.log('Spotify API returned no content or error:', response.status);
       return NextResponse.json({ isPlaying: false }, { status: 200 });
     }
 
     const song = await response.json();
 
     if (song.item === null) {
+      console.log('No song currently playing');
       return NextResponse.json({ isPlaying: false }, { status: 200 });
     }
 
@@ -71,7 +82,9 @@ export async function GET() {
       {
         status: 200,
         headers: {
-          'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30',
+          'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+          'Pragma': 'no-cache',
+          'Expires': '0',
         },
       }
     );

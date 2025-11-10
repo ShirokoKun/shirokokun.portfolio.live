@@ -28,8 +28,15 @@ export function useSpotify(refreshInterval = 30000): UseSpotifyReturn {
   const fetchNowPlaying = useCallback(async () => {
     try {
       setError(null);
-      const response = await fetch('/api/spotify/now-playing', {
+      
+      // Add timestamp to prevent caching
+      const timestamp = new Date().getTime();
+      const response = await fetch(`/api/spotify/now-playing?t=${timestamp}`, {
         cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+        },
       });
 
       if (!response.ok) {
@@ -40,8 +47,15 @@ export function useSpotify(refreshInterval = 30000): UseSpotifyReturn {
       
       // Handle error response from API
       if (data.error) {
+        console.warn('Spotify API error:', data.error);
         throw new Error(data.error);
       }
+
+      console.log('Spotify data fetched:', {
+        isPlaying: data.isPlaying,
+        title: data.title,
+        timestamp: new Date().toISOString(),
+      });
 
       setTrack(data);
       setIsLoading(false);

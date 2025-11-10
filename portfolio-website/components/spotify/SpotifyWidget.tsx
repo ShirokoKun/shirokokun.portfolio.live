@@ -20,8 +20,8 @@ const formatTime = (ms?: number): string => {
 };
 
 export default function SpotifyWidget({ className = '' }: SpotifyWidgetProps) {
-  // Fetch Spotify data with 30-second refresh
-  const { track, isLoading, error } = useSpotify(30000);
+  // Fetch Spotify data with 10-second refresh for real-time updates
+  const { track, isLoading, error } = useSpotify(10000);
 
   return (
     <motion.div
@@ -131,7 +131,7 @@ export default function SpotifyWidget({ className = '' }: SpotifyWidgetProps) {
         className="mt-6 pt-4 border-t border-zinc-800/50"
       >
         <p className="text-xs text-zinc-600 text-center">
-          Powered by Spotify API • Updates every 30s
+          Powered by Spotify API • Updates every 10s
         </p>
       </motion.div>
     </motion.div>
