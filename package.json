@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "npm install --prefix portfolio-backend && npm install --prefix portfolio-website",
     "dev": "npm run dev --prefix portfolio-website",
     "dev:backend": "npm run dev --prefix portfolio-backend",
     "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev\"",
-    "build": "cd portfolio-backend && npm install && npm run build && cd ../portfolio-website && npm install && npm run build",
+    "build": "cd portfolio-backend && npm install && npm run build",
     "build:backend": "cd portfolio-backend && npm install && npm run build",
     "build:frontend": "cd portfolio-website && npm install && npm run build",
     "start": "cd portfolio-backend && npm start",
