@@ -44,6 +44,7 @@ const fetchPostsFromAPI = async (): Promise<SubstackPost[]> => {
   const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
   
   const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+  console.log('🔍 Fetching from backend:', backendUrl);
   
   try {
     const response = await fetch(`${backendUrl}/api/blog/posts`, {
@@ -56,17 +57,23 @@ const fetchPostsFromAPI = async (): Promise<SubstackPost[]> => {
     
     clearTimeout(timeoutId);
     
+    console.log('📡 Response status:', response.status);
+    
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
     
     const data = await response.json();
+    console.log('📦 Data received:', data);
+    console.log('📝 Posts count:', data.posts?.length || 0);
+    
     if (data.posts && Array.isArray(data.posts) && data.posts.length > 0) {
       return data.posts;
     }
-    throw new Error('No posts found');
+    throw new Error('No posts found in response');
   } catch (err) {
     clearTimeout(timeoutId);
+    console.error('❌ Fetch error:', err);
     if (err instanceof Error && err.name === 'AbortError') {
       throw new Error('Request timeout');
     }
@@ -196,14 +203,31 @@ export default function SubstackBlog() {
             <PostSkeleton />
           </div>
         ) : posts.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-400 mb-4">No posts available at the moment.</p>
-            <button
-              onClick={() => fetchPosts(true, true)}
-              className="glass-surface px-4 py-2 rounded-lg text-white hover:scale-105 transition-transform"
-            >
-              Try Again
-            </button>
+          <div className="text-center py-12 glass-card p-8">
+            <div className="max-w-md mx-auto">
+              <div className="text-6xl mb-4">📝</div>
+              <h3 className="text-xl font-bold text-white mb-2">Coming Soon!</h3>
+              <p className="text-gray-400 mb-4">
+                New thoughts and stories are on their way. 
+                Check back soon or subscribe to my Substack to get notified!
+              </p>
+              <div className="flex gap-4 justify-center">
+                <button
+                  onClick={() => fetchPosts(true, true)}
+                  className="glass-surface px-4 py-2 rounded-lg text-white hover:scale-105 transition-transform"
+                >
+                  Refresh
+                </button>
+                <a
+                  href="https://shirokokun.substack.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-surface px-4 py-2 rounded-lg text-white hover:scale-105 transition-transform"
+                >
+                  Visit Substack →
+                </a>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
