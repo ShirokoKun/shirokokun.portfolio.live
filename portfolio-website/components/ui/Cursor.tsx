@@ -30,10 +30,10 @@ export default function Cursor() {
     let hovering: string | null = null;
     let overLink = false;
 
-    const onMove = (e: PointerEvent) => {
-      xTo(e.clientX);
-      yTo(e.clientY);
-      const target = e.target as HTMLElement | null;
+    let px = -1;
+    let py = -1;
+
+    const sense = (target: HTMLElement | null) => {
       const labelled = target?.closest<HTMLElement>('[data-cursor]');
       const next = labelled?.dataset.cursor || null;
       if (next !== hovering) {
@@ -46,18 +46,31 @@ export default function Cursor() {
         setLink(link);
       }
     };
+    const onMove = (e: PointerEvent) => {
+      px = e.clientX;
+      py = e.clientY;
+      xTo(px);
+      yTo(py);
+      sense(e.target as HTMLElement | null);
+    };
+    // Content slides under a still pointer while scrolling, so re-check what it is over.
+    const onScroll = () => {
+      if (px >= 0) sense(document.elementFromPoint(px, py) as HTMLElement | null);
+    };
     const onLeave = () => gsap.to(el, { opacity: 0, duration: 0.3 });
     const onEnter = () => gsap.to(el, { opacity: 1, duration: 0.3 });
     const onDown = () => gsap.to(el, { scale: 0.8, duration: 0.2 });
     const onUp = () => gsap.to(el, { scale: 1, duration: 0.4, ease: 'elastic.out(1, 0.5)' });
 
     window.addEventListener('pointermove', onMove, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
     document.addEventListener('pointerleave', onLeave);
     document.addEventListener('pointerenter', onEnter);
     window.addEventListener('pointerdown', onDown);
     window.addEventListener('pointerup', onUp);
     return () => {
       window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('scroll', onScroll);
       document.removeEventListener('pointerleave', onLeave);
       document.removeEventListener('pointerenter', onEnter);
       window.removeEventListener('pointerdown', onDown);
