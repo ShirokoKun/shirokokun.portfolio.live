@@ -43,10 +43,7 @@ export async function GET() {
     // Validate environment variables
     if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REFRESH_TOKEN) {
       console.error('Missing Spotify credentials');
-      return NextResponse.json(
-        { error: 'Spotify credentials not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Spotify credentials not configured' }, { status: 500 });
     }
 
     const response = await getRecentlyPlayed();
@@ -66,7 +63,9 @@ export async function GET() {
     const track = data.items[0].track;
     const playedAt = data.items[0].played_at;
 
-    console.log(`🕒 Last played: "${track.name}" by ${track.artists.map((a: any) => a.name).join(', ')} at ${playedAt}`);
+    console.log(
+      `🕒 Last played: "${track.name}" by ${track.artists.map((a: any) => a.name).join(', ')} at ${playedAt}`
+    );
 
     return NextResponse.json(
       {
@@ -85,16 +84,13 @@ export async function GET() {
           'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
           'CDN-Cache-Control': 'no-store',
           'Vercel-CDN-Cache-Control': 'no-store',
-          'Pragma': 'no-cache',
-          'Expires': '0',
+          Pragma: 'no-cache',
+          Expires: '0',
         },
       }
     );
   } catch (error) {
     console.error('Error fetching recently played:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch recently played' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch recently played' }, { status: 500 });
   }
 }

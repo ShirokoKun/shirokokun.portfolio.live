@@ -7,10 +7,7 @@ const INSTAGRAM_USER_ID = process.env.INSTAGRAM_USER_ID;
 export async function GET() {
   try {
     if (!INSTAGRAM_ACCESS_TOKEN || !INSTAGRAM_USER_ID) {
-      return NextResponse.json(
-        { error: 'Instagram credentials not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Instagram credentials not configured' }, { status: 500 });
     }
 
     // Fetch user's media (photos and videos including Reels)
@@ -51,9 +48,6 @@ export async function GET() {
     );
   } catch (error) {
     console.error('Error fetching Instagram reels:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch Instagram reels', reels: [] },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch Instagram reels', reels: [] }, { status: 500 });
   }
 }

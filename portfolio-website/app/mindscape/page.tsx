@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function MindscapePage() {
   return (
-    <main className="w-full h-screen">
+    <main className="w-full h-screen" data-lenis-prevent>
       <MindscapeGraph />
     </main>
   );

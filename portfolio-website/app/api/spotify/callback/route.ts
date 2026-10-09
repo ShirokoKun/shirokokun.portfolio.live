@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
   try {
     // Exchange code for tokens
     const basic = Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64');
-    
+
     const response = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
@@ -301,7 +301,7 @@ SPOTIFY_REFRESH_TOKEN=${data.refresh_token.substring(0, 50)}...
     );
   } catch (error) {
     console.error('Spotify callback error:', error);
-    
+
     return new NextResponse(
       `
       <!DOCTYPE html>

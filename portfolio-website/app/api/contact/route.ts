@@ -53,7 +53,10 @@ const sendEmailNotification = async (data: {
 
   if (!emailUser || !emailPass) {
     console.warn('⚠️  Email not configured, skipping notification');
-    console.warn('Available env vars:', Object.keys(process.env).filter(k => k.includes('EMAIL')));
+    console.warn(
+      'Available env vars:',
+      Object.keys(process.env).filter((k) => k.includes('EMAIL'))
+    );
     return false;
   }
 
@@ -66,7 +69,7 @@ const sendEmailNotification = async (data: {
         pass: emailPass,
       },
     });
-    
+
     console.log('✅ Transporter created, verifying connection...');
     await transporter.verify();
     console.log('✅ Email connection verified');
@@ -269,18 +272,12 @@ export async function POST(request: Request) {
       range: targetRange,
       valueInputOption: 'USER_ENTERED',
       requestBody: {
-        values: [[
-          timestamp,
-          name,
-          email,
-          subject,
-          message,
-        ]],
+        values: [[timestamp, name, email, subject, message]],
       },
     });
 
     console.log('📧 Attempting to send email notification...');
-    
+
     // Send email notification (await to ensure it completes)
     try {
       const emailSent = await sendEmailNotification({
@@ -290,7 +287,7 @@ export async function POST(request: Request) {
         message,
         timestamp,
       });
-      
+
       if (emailSent) {
         console.log('✅ Email sent successfully');
       } else {
@@ -307,5 +304,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to save message' }, { status: 500 });
   }
 }
-
-

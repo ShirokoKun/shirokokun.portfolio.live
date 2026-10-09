@@ -60,7 +60,7 @@ export default function MindscapeGraph() {
         setLoading(true);
         const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
         const response = await fetch(`${backendUrl}/api/mindscape/public`);
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch mindscape data');
         }
@@ -68,9 +68,9 @@ export default function MindscapeGraph() {
         const result = await response.json();
         const { nodes: nodeData, connections: connectionData } = result.data;
 
-        console.log('🕸️ Loaded mindscape:', { 
-          nodes: nodeData.length, 
-          connections: connectionData.length 
+        console.log('🕸️ Loaded mindscape:', {
+          nodes: nodeData.length,
+          connections: connectionData.length,
         });
 
         // Transform nodes to React Flow format
@@ -97,8 +97,8 @@ export default function MindscapeGraph() {
           type: conn.type === 'hierarchy' ? 'step' : 'default',
           animated: conn.type === 'weak',
           label: conn.label,
-          labelStyle: { 
-            fontSize: 10, 
+          labelStyle: {
+            fontSize: 10,
             fill: '#ffffff80',
             fontWeight: 500,
           },
@@ -134,21 +134,25 @@ export default function MindscapeGraph() {
   }, [setNodes, setEdges]);
 
   // Handle node click
-  const onNodeClick = useCallback((_: any, node: Node) => {
-    // Find the full node data
-    const fullNodeData = nodes.find(n => n.id === node.id);
-    if (fullNodeData) {
-      setSelectedNode(fullNodeData.data as any);
-    }
-  }, [nodes]);
+  const onNodeClick = useCallback(
+    (_: any, node: Node) => {
+      // Find the full node data
+      const fullNodeData = nodes.find((n) => n.id === node.id);
+      if (fullNodeData) {
+        setSelectedNode(fullNodeData.data as any);
+      }
+    },
+    [nodes]
+  );
 
   // Filter nodes based on search and type
   const filteredNodes = useMemo(() => {
     return nodes.filter((node) => {
-      const matchesSearch = searchQuery === '' || 
+      const matchesSearch =
+        searchQuery === '' ||
         node.data.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         node.data.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-      
+
       const matchesFilter = filterType === null || node.data.type === filterType;
 
       return matchesSearch && matchesFilter;
@@ -157,10 +161,8 @@ export default function MindscapeGraph() {
 
   // Filter edges to only show connections between filtered nodes
   const filteredEdges = useMemo(() => {
-    const visibleNodeIds = new Set(filteredNodes.map(n => n.id));
-    return edges.filter(edge => 
-      visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
-    );
+    const visibleNodeIds = new Set(filteredNodes.map((n) => n.id));
+    return edges.filter((edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target));
   }, [edges, filteredNodes]);
 
   // Loading state
@@ -200,7 +202,7 @@ export default function MindscapeGraph() {
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             🕸️ Mindscape
           </h1>
-          
+
           {/* Search */}
           <input
             type="text"
@@ -217,9 +219,7 @@ export default function MindscapeGraph() {
                 key={type}
                 onClick={() => setFilterType(filterType === type ? null : type)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition ${
-                  filterType === type
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                  filterType === type ? 'bg-blue-500 text-white' : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
                 }`}
               >
                 {type}
@@ -244,14 +244,9 @@ export default function MindscapeGraph() {
         maxZoom={2}
         className="bg-black"
       >
-        <Background 
-          variant={BackgroundVariant.Dots} 
-          gap={20} 
-          size={1} 
-          color="#ffffff10" 
-        />
+        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#ffffff10" />
         <Controls className="bg-zinc-900/80 border border-zinc-700/50 rounded-lg" />
-        <MiniMap 
+        <MiniMap
           className="bg-zinc-900/80 border border-zinc-700/50 rounded-lg"
           nodeColor={(node) => (node.data as any).color}
         />
@@ -268,7 +263,7 @@ export default function MindscapeGraph() {
           </button>
 
           <div className="mb-4">
-            <span 
+            <span
               className="inline-block px-2 py-1 rounded text-xs font-medium mb-2"
               style={{ backgroundColor: `${selectedNode.style.color}40` }}
             >
@@ -281,18 +276,13 @@ export default function MindscapeGraph() {
 
           <div className="flex flex-wrap gap-2 mb-4">
             {selectedNode.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded text-sm text-zinc-300"
-              >
+              <span key={tag} className="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded text-sm text-zinc-300">
                 #{tag}
               </span>
             ))}
           </div>
 
-          <div className="text-xs text-zinc-500">
-            Created: {new Date(selectedNode.createdAt).toLocaleDateString()}
-          </div>
+          <div className="text-xs text-zinc-500">Created: {new Date(selectedNode.createdAt).toLocaleDateString()}</div>
         </div>
       )}
 

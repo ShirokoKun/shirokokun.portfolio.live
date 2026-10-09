@@ -1,101 +1,52 @@
 import type { Config } from 'tailwindcss';
 
+const token = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
+
 const config: Config = {
-  darkMode: ['class'],
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './content/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['var(--font-sans)'],
-        jakarta: ['var(--font-jakarta)'],
-        sora: ['var(--font-sora)'],
-      },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'primary-gradient': 'linear-gradient(to right, #9333EA, #DB2777)',
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
       colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))',
-        },
+        bg: token('bg'),
+        fg: token('fg'),
+        muted: token('muted'),
+        line: token('line'),
+        surface: token('surface'),
+        accent: token('accent'),
+        'accent-ink': token('accent-ink'),
+      },
+      fontFamily: {
+        sans: ['var(--font-archivo)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-archivo)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-instrument)', 'Georgia', 'serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+      },
+      fontSize: {
+        mega: ['clamp(4.5rem, 17vw, 19rem)', { lineHeight: '0.82', letterSpacing: '-0.04em' }],
+        huge: ['clamp(2.25rem, 9vw, 9.5rem)', { lineHeight: '0.88', letterSpacing: '-0.035em' }],
+        big: ['clamp(2.25rem, 5vw, 5rem)', { lineHeight: '0.95', letterSpacing: '-0.03em' }],
+      },
+      transitionTimingFunction: {
+        expo: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        quart: 'cubic-bezier(0.76, 0, 0.24, 1)',
       },
       keyframes: {
-        'accordion-down': {
-          from: {
-            height: '0',
-          },
-          to: {
-            height: 'var(--radix-accordion-content-height)',
-          },
-        },
-        'accordion-up': {
-          from: {
-            height: 'var(--radix-accordion-content-height)',
-          },
-          to: {
-            height: '0',
-          },
-        },
-        'shine': {
-          '0%': { 'background-position': '200% 0' },
-          '100%': { 'background-position': '-200% 0' },
+        blink: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.2' } },
+        grain: {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '20%': { transform: 'translate(-3%, 2%)' },
+          '40%': { transform: 'translate(2%, -3%)' },
+          '60%': { transform: 'translate(-2%, -1%)' },
+          '80%': { transform: 'translate(3%, 3%)' },
         },
       },
       animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-        'shine': 'shine 5s linear infinite',
+        blink: 'blink 1.4s ease-in-out infinite',
+        grain: 'grain 0.9s steps(4) infinite',
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [],
 };
+
 export default config;
