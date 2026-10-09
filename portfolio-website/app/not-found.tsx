@@ -1,38 +1,33 @@
 import Link from 'next/link';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 export default function NotFound() {
   return (
-    <div className="bg-black text-white min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1 flex items-center justify-center px-4 pt-24">
-        <div className="max-w-2xl w-full text-center">
-          <h1 className="text-9xl font-black mb-4 bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-            404
-          </h1>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Page Not Found</h2>
-          <p className="text-xl text-gray-400 mb-8">
-            The page you&apos;re looking for doesn&apos;t exist or has been moved.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link
-              href="/"
-              className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-100 transition-colors"
-            >
-              Go Home
-            </Link>
-            <Link
-              href="/projects"
-              className="px-6 py-3 bg-transparent text-white font-medium rounded-full border border-white/30 hover:bg-white/10 transition-colors"
-            >
-              View Projects
-            </Link>
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </div>
+    <main className="flex min-h-[100svh] flex-col justify-between p-4 sm:p-6 md:p-10">
+      <span className="tc text-muted">Error 404 · Frame not found</span>
+      <div>
+        <h1 className="text-pro-xl font-semibold">
+          Lost in
+          <br />
+          <span className="font-serif font-normal italic text-accent">the edit.</span>
+        </h1>
+        <p className="mt-6 max-w-[40ch] text-xl">
+          This page was cut from the final version. The rest of the timeline is still here.
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href="/"
+          className="tc inline-flex h-12 items-center rounded-full bg-fg px-6 text-bg hover:bg-accent hover:text-accent-ink"
+        >
+          Back to start
+        </Link>
+        <Link
+          href="/work"
+          className="tc inline-flex h-12 items-center rounded-full border border-line/25 px-6 hover:border-fg"
+        >
+          Browse the archive
+        </Link>
+      </div>
+    </main>
   );
 }
-

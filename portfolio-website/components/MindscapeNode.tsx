@@ -47,16 +47,11 @@ function MindscapeNode({ data, selected }: NodeProps<MindscapeNodeData>) {
           border-2 transition-all duration-300
           flex items-center justify-center
           cursor-pointer
-          ${selected 
-            ? 'border-white shadow-2xl scale-110' 
-            : 'border-white/30 hover:border-white/60 hover:scale-105'
-          }
+          ${selected ? 'border-white shadow-2xl scale-110' : 'border-white/30 hover:border-white/60 hover:scale-105'}
         `}
         style={{
           backgroundColor: `${data.color}40`,
-          boxShadow: selected 
-            ? `0 0 30px ${data.color}, 0 0 60px ${data.color}40`
-            : `0 0 10px ${data.color}40`,
+          boxShadow: selected ? `0 0 30px ${data.color}, 0 0 60px ${data.color}40` : `0 0 10px ${data.color}40`,
         }}
       >
         <span className="text-3xl">{emoji}</span>

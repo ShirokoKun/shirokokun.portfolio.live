@@ -6,10 +6,7 @@ const YOUTUBE_CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID;
 export async function GET() {
   try {
     if (!YOUTUBE_API_KEY || !YOUTUBE_CHANNEL_ID) {
-      return NextResponse.json(
-        { error: 'YouTube credentials not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'YouTube credentials not configured' }, { status: 500 });
     }
 
     // Step 1: Get uploads playlist ID
@@ -42,9 +39,7 @@ export async function GET() {
     const playlistData = await playlistResponse.json();
 
     // Step 3: Get video statistics
-    const videoIds = playlistData.items
-      .map((item: any) => item.snippet.resourceId.videoId)
-      .join(',');
+    const videoIds = playlistData.items.map((item: any) => item.snippet.resourceId.videoId).join(',');
 
     const statsResponse = await fetch(
       `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}&key=${YOUTUBE_API_KEY}`,
@@ -85,9 +80,6 @@ export async function GET() {
     );
   } catch (error) {
     console.error('Error fetching YouTube videos:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch YouTube videos', videos: [] },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: 'Failed to fetch YouTube videos', videos: [] }, { status: 500 });
   }
 }

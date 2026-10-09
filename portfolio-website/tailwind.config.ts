@@ -1,101 +1,54 @@
 import type { Config } from 'tailwindcss';
 
+const token = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
+
 const config: Config = {
-  darkMode: ['class'],
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './content/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['var(--font-sans)'],
-        jakarta: ['var(--font-jakarta)'],
-        sora: ['var(--font-sora)'],
-      },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'primary-gradient': 'linear-gradient(to right, #9333EA, #DB2777)',
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
       colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))',
-        },
+        bg: token('bg'),
+        fg: token('fg'),
+        muted: token('muted'),
+        line: token('line'),
+        surface: token('surface'),
+        accent: token('accent'),
+        'accent-ink': token('accent-ink'),
+      },
+      fontFamily: {
+        // Professional: a precise grotesk, a timecode mono and a serif voice.
+        sans: ['var(--font-inter-tight)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+        serif: ['var(--font-instrument)', 'Georgia', 'serif'],
+        // Personal: condensed poster caps and a typewriter mono.
+        poster: ['var(--font-anton)', 'Impact', 'sans-serif'],
+        type: ['var(--font-space-mono)', 'ui-monospace', 'monospace'],
+      },
+      fontSize: {
+        // Professional scale: three steps, mixed case, tight but never touching.
+        'pro-hero': ['clamp(3rem, 8.2vw, 9.5rem)', { lineHeight: '0.92', letterSpacing: '-0.05em' }],
+        'pro-xl': ['clamp(2.75rem, 6.4vw, 7.25rem)', { lineHeight: '0.94', letterSpacing: '-0.045em' }],
+        'pro-lg': ['clamp(2rem, 3.6vw, 3.75rem)', { lineHeight: '1', letterSpacing: '-0.035em' }],
+        'pro-md': ['clamp(1.25rem, 1.6vw, 1.625rem)', { lineHeight: '1.25', letterSpacing: '-0.015em' }],
+        // Personal scale: poster caps that are meant to be huge.
+        'poster-xl': ['clamp(5rem, 19vw, 21rem)', { lineHeight: '0.8', letterSpacing: '-0.01em' }],
+        'poster-lg': ['clamp(3rem, 8vw, 8.5rem)', { lineHeight: '0.85', letterSpacing: '0' }],
+      },
+      transitionTimingFunction: {
+        expo: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        quart: 'cubic-bezier(0.76, 0, 0.24, 1)',
       },
       keyframes: {
-        'accordion-down': {
-          from: {
-            height: '0',
-          },
-          to: {
-            height: 'var(--radix-accordion-content-height)',
-          },
-        },
-        'accordion-up': {
-          from: {
-            height: 'var(--radix-accordion-content-height)',
-          },
-          to: {
-            height: '0',
-          },
-        },
-        'shine': {
-          '0%': { 'background-position': '200% 0' },
-          '100%': { 'background-position': '-200% 0' },
-        },
+        blink: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.2' } },
+        fadein: { from: { opacity: '0' }, to: { opacity: '1' } },
       },
       animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-        'shine': 'shine 5s linear infinite',
+        blink: 'blink 1.4s ease-in-out infinite',
+        fadein: 'fadein 1.2s ease-out both',
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [],
 };
+
 export default config;

@@ -43,10 +43,7 @@ export async function GET() {
     // Validate environment variables
     if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REFRESH_TOKEN) {
       console.error('Missing Spotify credentials');
-      return NextResponse.json(
-        { isPlaying: false, error: 'Spotify credentials not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ isPlaying: false, error: 'Spotify credentials not configured' }, { status: 500 });
     }
 
     const response = await getNowPlaying();
@@ -72,7 +69,9 @@ export async function GET() {
     const duration = song.item.duration_ms;
     const progress = song.progress_ms;
 
-    console.log(`✅ Now playing: "${title}" by ${artist} (${Math.floor(progress / 1000)}s / ${Math.floor(duration / 1000)}s)`);
+    console.log(
+      `✅ Now playing: "${title}" by ${artist} (${Math.floor(progress / 1000)}s / ${Math.floor(duration / 1000)}s)`
+    );
 
     return NextResponse.json(
       {
@@ -92,16 +91,13 @@ export async function GET() {
           'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
           'CDN-Cache-Control': 'no-store',
           'Vercel-CDN-Cache-Control': 'no-store',
-          'Pragma': 'no-cache',
-          'Expires': '0',
+          Pragma: 'no-cache',
+          Expires: '0',
         },
       }
     );
   } catch (error) {
     console.error('Error fetching now playing:', error);
-    return NextResponse.json(
-      { isPlaying: false, error: 'Failed to fetch now playing' },
-      { status: 500 }
-    );
+    return NextResponse.json({ isPlaying: false, error: 'Failed to fetch now playing' }, { status: 500 });
   }
 }

@@ -13,19 +13,12 @@ function getRedirectUri(req: Request): string {
 // This endpoint helps you get the authorization URL
 export async function GET(request: Request) {
   if (!SPOTIFY_CLIENT_ID) {
-    return NextResponse.json(
-      { error: 'Spotify Client ID not configured' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Spotify Client ID not configured' }, { status: 500 });
   }
 
   const redirectUri = getRedirectUri(request);
 
-  const scopes = [
-    'user-read-currently-playing',
-    'user-read-recently-played',
-    'user-read-playback-state',
-  ];
+  const scopes = ['user-read-currently-playing', 'user-read-recently-played', 'user-read-playback-state'];
 
   const params = new URLSearchParams({
     response_type: 'code',
