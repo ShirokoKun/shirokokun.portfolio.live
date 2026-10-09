@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import Contact from '@/components/sections/Contact';
+import ContactPage from '@/components/sections/ContactPage';
 
 export const metadata: Metadata = {
   title: 'Contact',
   description: 'Get in touch with Swastik Gupta for motion design, edits and collaborations.',
 };
 
-export default function ContactPage() {
-  return <Contact standalone />;
+export default function Page() {
+  return <ContactPage />;
 }

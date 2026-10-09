@@ -52,7 +52,7 @@ export default function MediaModal({ item, onClose }: Props) {
           role="dialog"
           aria-modal="true"
           aria-label={item.title}
-          className="fixed inset-0 z-[85] flex flex-col bg-bg/95 backdrop-blur-xl"
+          className="fixed inset-0 z-[85] flex flex-col bg-bg "
           initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
           animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
           exit={{ clipPath: 'inset(0% 0% 100% 0%)' }}
@@ -60,14 +60,14 @@ export default function MediaModal({ item, onClose }: Props) {
           data-lenis-prevent
         >
           <div className="shell flex items-center justify-between py-4">
-            <span className="label text-muted">
+            <span className="tc text-muted">
               {item.year} · {item.disciplines.join(' / ')}
             </span>
             <button
               ref={closeBtn}
               type="button"
               onClick={onClose}
-              className="label inline-flex h-10 items-center gap-2 rounded-full border border-line/25 px-4 hover:border-fg"
+              className="tc inline-flex h-10 items-center gap-2 rounded-full border border-line/25 px-4 hover:border-fg"
             >
               Close <span aria-hidden>✕</span>
             </button>
@@ -109,8 +109,8 @@ export default function MediaModal({ item, onClose }: Props) {
                   data-cursor="Open"
                   className="group relative flex aspect-video w-full flex-col justify-between overflow-hidden bg-fg p-6 text-bg md:p-10"
                 >
-                  <span className="label text-bg/60">{item.context}</span>
-                  <span className="display text-big transition-colors duration-500 group-hover:text-accent">
+                  <span className="tc text-bg/60">{item.context}</span>
+                  <span className="text-pro-lg font-semibold transition-colors duration-500 group-hover:text-accent">
                     {item.title}
                   </span>
                   <span className="label">Open externally ↗</span>
@@ -124,14 +124,12 @@ export default function MediaModal({ item, onClose }: Props) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: EASE_EXPO, delay: 0.5 }}
             >
-              <h2 className="display text-big">{item.title}</h2>
+              <h2 className="text-pro-lg font-semibold">{item.title}</h2>
               <p className="mt-2 font-serif text-2xl italic text-muted">{item.context}</p>
-              {item.stat && (
-                <p className="label mt-6 inline-block bg-accent px-2 py-1.5 text-accent-ink">{item.stat}</p>
-              )}
+              {item.stat && <p className="tc mt-6 inline-block bg-accent px-2 py-1.5 text-accent-ink">{item.stat}</p>}
               <p className="mt-6 max-w-[46ch] text-lg leading-snug">{item.description}</p>
               {item.placeholder && (
-                <p className="label mt-6 border-l-2 border-accent pl-3 leading-relaxed text-muted">
+                <p className="tc mt-6 border-l-2 border-accent pl-3 leading-relaxed text-muted">
                   Featured pieces coming soon
                 </p>
               )}
@@ -140,7 +138,7 @@ export default function MediaModal({ item, onClose }: Props) {
                   href={item.link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="label mt-8 inline-flex h-12 items-center gap-3 rounded-full bg-fg px-6 text-bg hover:bg-accent hover:text-accent-ink"
+                  className="tc mt-8 inline-flex h-12 items-center gap-3 rounded-full bg-fg px-6 text-bg hover:bg-accent hover:text-accent-ink"
                 >
                   {item.link.label} ↗
                 </a>

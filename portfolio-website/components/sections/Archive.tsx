@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { projects, type Project } from '@/content/site';
 import { useMode } from '@/components/providers/ModeProvider';
 import { EASE_EXPO } from '@/lib/motion';
-import Reveal from '@/components/ui/Reveal';
 import Cover from '@/components/ui/Cover';
 import MediaModal from '@/components/ui/MediaModal';
 
@@ -14,6 +13,9 @@ type Scope = 'professional' | 'personal' | 'all';
 /** Every project on one filterable page. */
 export default function Archive() {
   const { mode } = useMode();
+  const pro = mode === 'professional';
+  const L = pro ? 'tc' : 'tw';
+  const H1 = pro ? 'text-pro-xl font-semibold' : 'poster text-poster-lg';
   const [scope, setScope] = useState<Scope>(mode);
   const [tag, setTag] = useState('All');
   const [active, setActive] = useState<Project | null>(null);
@@ -28,12 +30,10 @@ export default function Archive() {
   const shown = tag === 'All' ? inScope : inScope.filter((p) => p.disciplines.includes(tag));
 
   return (
-    <section className="pb-24 pt-32 md:pb-36 md:pt-44">
+    <section className="pb-24 pt-28 md:pb-32 md:pt-36">
       <div className="shell">
-        <span className="label text-muted">({String(projects.length).padStart(2, '0')}) Everything</span>
-        <Reveal as="h1" by="chars" className="display mt-4 text-mega">
-          Archive
-        </Reveal>
+        <span className={`${L} text-muted`}>({String(projects.length).padStart(2, '0')}) Everything</span>
+        <h1 className={`mt-4 ${H1}`}>Archive</h1>
 
         <div className="mt-12 flex flex-col gap-4 border-y border-line/15 py-4 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap gap-2" role="tablist" aria-label="Which side">
@@ -47,7 +47,7 @@ export default function Archive() {
                   setScope(s);
                   setTag('All');
                 }}
-                className={`label rounded-full px-4 py-2.5 transition-colors ${
+                className={`${L} rounded-full px-4 py-2.5 transition-colors ${
                   scope === s ? 'bg-fg text-bg' : 'border border-line/20 hover:border-fg'
                 }`}
               >
@@ -62,7 +62,7 @@ export default function Archive() {
                 type="button"
                 onClick={() => setTag(t)}
                 aria-pressed={tag === t}
-                className={`label shrink-0 rounded-full px-3 py-2 text-[10px] transition-colors ${
+                className={`${L} shrink-0 rounded-full px-3 py-2 transition-colors ${
                   tag === t ? 'bg-accent text-accent-ink' : 'text-muted hover:text-fg'
                 }`}
               >
@@ -102,18 +102,15 @@ export default function Archive() {
                       </h2>
                       <p className="mt-1 text-muted">{p.context}</p>
                     </div>
-                    <span className="label shrink-0 pt-1 text-muted">{p.year}</span>
+                    <span className={`${L} shrink-0 pt-1 text-muted`}>{p.year}</span>
                   </div>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {p.disciplines.map((d) => (
-                      <span
-                        key={d}
-                        className="label rounded-full border border-line/15 px-2 py-1 text-[9px] text-muted"
-                      >
+                      <span key={d} className={`${L} rounded-full border border-line/15 px-2 py-1 text-muted`}>
                         {d}
                       </span>
                     ))}
-                    {p.stat && <span className="label bg-accent px-2 py-1 text-[9px] text-accent-ink">{p.stat}</span>}
+                    {p.stat && <span className={`${L} bg-accent px-2 py-1 text-accent-ink`}>{p.stat}</span>}
                   </div>
                 </button>
               </motion.li>

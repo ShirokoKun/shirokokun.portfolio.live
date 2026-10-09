@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { EASE_EXPO } from '@/lib/motion';
-import Reveal from '@/components/ui/Reveal';
+import { useMode } from '@/components/providers/ModeProvider';
 
 type Post = { title: string; link: string; publishedAt: string; excerpt: string; tags?: string[] };
 
@@ -11,6 +11,9 @@ const SUBSTACK = 'https://shirokokun.substack.com';
 
 /** Substack posts as an editorial index. */
 export default function BlogList() {
+  const pro = useMode().mode === 'professional';
+  const L = pro ? 'tc' : 'tw';
+  const H1 = pro ? 'text-pro-xl font-semibold' : 'poster text-poster-lg';
   const [posts, setPosts] = useState<Post[] | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -30,12 +33,10 @@ export default function BlogList() {
   }, []);
 
   return (
-    <section className="pb-24 pt-32 md:pb-36 md:pt-44">
+    <section className="pb-24 pt-28 md:pb-32 md:pt-36">
       <div className="shell">
-        <span className="label text-muted">Notes from the timeline</span>
-        <Reveal as="h1" by="chars" className="display mt-4 text-mega">
-          Writing
-        </Reveal>
+        <span className={`${L} text-muted`}>Notes from the timeline</span>
+        <h1 className={`mt-4 ${H1}`}>Writing</h1>
         <p className="mt-8 max-w-[46ch] text-xl leading-snug">
           Thoughts on design, editing, technology and whatever else I cannot stop thinking about. Published on{' '}
           <a href={SUBSTACK} target="_blank" rel="noreferrer" className="link-underline text-accent">
@@ -80,14 +81,16 @@ export default function BlogList() {
                 data-cursor="Read"
                 className="group grid gap-3 py-8 md:grid-cols-12 md:gap-6"
               >
-                <span className="label pt-2 text-muted md:col-span-2">
+                <span className={`${L} pt-2 text-muted md:col-span-2`}>
                   {new Date(p.publishedAt).toLocaleDateString('en-GB', {
                     day: '2-digit',
                     month: 'short',
                     year: 'numeric',
                   })}
                 </span>
-                <h2 className="display text-[clamp(1.75rem,3.6vw,3.25rem)] leading-[0.95] transition-colors duration-300 group-hover:text-accent md:col-span-6">
+                <h2
+                  className={`${pro ? 'text-pro-lg font-semibold' : 'poster text-[clamp(1.75rem,3.6vw,3.25rem)] leading-[0.95]'} transition-colors duration-300 group-hover:text-accent md:col-span-6`}
+                >
                   {p.title}
                 </h2>
                 <p className="line-clamp-3 text-muted md:col-span-4">{p.excerpt}</p>

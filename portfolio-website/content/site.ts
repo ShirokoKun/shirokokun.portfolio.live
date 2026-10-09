@@ -33,83 +33,51 @@ export const profile = {
   ],
 };
 
-/** Copy that changes with the Professional / Personal switch. */
-export const modeCopy: Record<
-  Mode,
-  {
-    label: string;
-    short: string;
-    heroLines: string[];
-    heroAccent: string;
-    heroIntro: string;
-    status: string;
-    marquee: string[];
-    workTitle: string;
-    workIntro: string;
-    aboutTitle: string;
-    about: string[];
-    timelineTitle: string;
-    contactTitle: string[];
-    contactIntro: string;
-  }
-> = {
+/** Copy that changes with the Professional / Personal switch. Kept short on purpose. */
+export const modeCopy = {
   professional: {
     label: 'Professional',
     short: 'Pro',
-    heroLines: ['Motion', 'Designer'],
-    heroAccent: '& creative generalist',
+    status: 'Motion designer at IDK Show',
+    heroLines: ['Motion designer,', 'creative generalist.'],
     heroIntro:
-      'I make ideas move. Motion graphics for IDK Show, plus edits, identities and interfaces for 20+ clients and 5+ brands.',
-    status: 'Motion Designer at IDK Show',
-    marquee: [
-      'Motion Design',
-      'Video Editing',
-      'Graphic Design',
-      'Brand Identity',
-      'UI / UX',
-      'Creative Coding',
-      'Marketing Ops',
-    ],
-    workTitle: 'Selected Work',
-    workIntro: 'Client work, studio roles and commissions. Click any row to open it.',
-    aboutTitle: 'The generalist who specialises in motion',
-    about: [
-      "I'm Swastik, a motion designer and creative generalist based in Bhubaneswar, India. I currently design motion for IDK Show, a YouTube show about AI, technology and the future of being human.",
-      "Over five years I've edited, animated and designed across 100+ projects: event films, music visuals, posters, social campaigns and interfaces. A computer science degree from IIIT Bhubaneswar means I'm as comfortable in an expression panel as I am in a Figma file.",
-      'I care about rhythm, clarity and a little bit of chaos. Minimal systems with bold accents, professional with personal.',
-    ],
-    timelineTitle: 'Experience',
-    contactTitle: ["Let's make", 'it move.'],
-    contactIntro: 'Open to motion design roles, freelance edits and collaborations. Tell me what you are making.',
+      'I design motion for IDK Show, a YouTube show about AI and the future. Before that: event films, identities and campaigns for 20+ clients.',
+    aboutTitle: 'I make complicated ideas easy to watch.',
+    about:
+      "I'm Swastik, based in Bhubaneswar. A computer science degree from IIIT Bhubaneswar means I'm as at home in an expression panel as in a Figma file. I like rhythm, clarity and a little chaos.",
+    signoffTitle: 'Got something that needs to move?',
+    signoffIntro: 'Open to motion design roles, freelance edits and collaborations.',
   },
   personal: {
     label: 'Personal',
-    short: 'Off-duty',
-    heroLines: ['sxk', '.m4in'],
-    heroAccent: 'after hours',
-    heroIntro:
-      'Music visuals, anime edits, grunge posters and late-night experiments. No briefs, no clients, just taste.',
+    short: 'After hours',
     status: 'Editing something at 3am',
-    marquee: ['Music Visuals', 'Anime Edits', 'Posters', 'Visual Mixtapes', 'Surrealism', 'Lo-fi', 'Experiments'],
-    workTitle: 'Edits & Experiments',
-    workIntro: 'Things I make for the love of it. Mostly vertical, mostly loud.',
-    aboutTitle: 'Collecting skills like infinity stones',
-    about: [
-      'Hey, I go by sxk.m4in online. In a world where everyone is niching down, I collect skills: editing, posters, music production, creative coding and whatever else catches my eye at 2am.',
-      'It started in 2019. By 2021 I was posting anime edits made on my phone, one of them went on to cross 865K views, and I have not stopped cutting to the beat since.',
-      'This side of the site is the sketchbook. It is where I try things before they are ready for a client.',
-    ],
-    timelineTitle: 'Journey',
-    contactTitle: ['Say hi,', 'send songs.'],
-    contactIntro: 'Collabs with artists, music video ideas or just a good track recommendation. My inbox is open.',
+    heroIntro: 'Edits, posters and 3am experiments. No briefs, no clients, just taste.',
+    signoffTitle: ['Say hi,', 'send songs.'],
+    signoffIntro: 'Collabs with artists, music video ideas or a good track. My inbox is open.',
   },
-};
+} as const;
 
 export type Media =
   { type: 'youtube'; id: string; vertical?: boolean } | { type: 'image'; src: string } | { type: 'link'; href: string };
 
+/** Tracks on the professional timeline, top to bottom, like an edit timeline. */
+export type Track = 'motion' | 'design' | 'roles';
+export const tracks: { id: Track; code: string; label: string }[] = [
+  { id: 'motion', code: 'V2', label: 'Motion & edit' },
+  { id: 'design', code: 'V1', label: 'Design' },
+  { id: 'roles', code: 'A1', label: 'Roles' },
+];
+
+/** First and last year on the timeline ruler. "Now" counts as this year. */
+export const TIMELINE_START = 2019;
+export const TIMELINE_END = 2026;
+
 export type Project = {
   id: string;
+  /** Professional work: which timeline track it sits on, and the years it covers. */
+  track?: Track;
+  span?: [number, number];
   title: string;
   context: string;
   disciplines: string[];
@@ -132,6 +100,8 @@ export const projects: Project[] = [
   // ─── Professional ────────────────────────────────────────────────────────────
   {
     id: 'idk-show',
+    track: 'motion',
+    span: [2026, 2026],
     title: 'IDK Show',
     context: 'Motion Designer, ongoing',
     disciplines: ['Motion Design', 'Explainer Graphics'],
@@ -146,6 +116,8 @@ export const projects: Project[] = [
   },
   {
     id: 'advaita-aftermovie',
+    track: 'motion',
+    span: [2023, 2023],
     title: 'Advaita 2023',
     context: 'IIIT Bhubaneswar, annual fest',
     disciplines: ['Event Film', 'Edit', 'Colour'],
@@ -159,6 +131,8 @@ export const projects: Project[] = [
   },
   {
     id: 'advaita-identity',
+    track: 'design',
+    span: [2023, 2023],
     title: 'Advaita: Stellar Reverie',
     context: 'Fest identity poster',
     disciplines: ['Graphic Design', 'Identity'],
@@ -171,6 +145,8 @@ export const projects: Project[] = [
   },
   {
     id: 'video-editing',
+    track: 'motion',
+    span: [2019, 2026],
     title: 'Video Editing',
     context: 'Client collection',
     disciplines: ['Edit', 'Motion', 'Sound'],
@@ -188,6 +164,8 @@ export const projects: Project[] = [
   },
   {
     id: 'cover-art',
+    track: 'design',
+    span: [2023, 2025],
     title: 'Cover Art',
     context: 'Releases for independent artists',
     disciplines: ['Graphic Design', 'Music'],
@@ -206,6 +184,8 @@ export const projects: Project[] = [
   },
   {
     id: 'posters',
+    track: 'design',
+    span: [2022, 2025],
     title: 'Posters',
     context: 'Events, promotions and campaigns',
     disciplines: ['Graphic Design', 'Print'],
@@ -223,6 +203,8 @@ export const projects: Project[] = [
   },
   {
     id: 'social',
+    track: 'design',
+    span: [2023, 2025],
     title: 'Social Campaigns',
     context: 'Content for brands and startups',
     disciplines: ['Social', 'Marketing Ops'],
@@ -240,6 +222,8 @@ export const projects: Project[] = [
   },
   {
     id: 'contributions',
+    track: 'motion',
+    span: [2022, 2025],
     title: 'Projects & Contributions',
     context: 'Collaborations and initiatives',
     disciplines: ['Mixed'],
@@ -408,14 +392,14 @@ export const projects: Project[] = [
   },
 ];
 
-/** The big framed reel on the home page. */
+/** The reel each side plays, and the frames its film strip shows. */
 export const showreel: Record<
   Mode,
   { title: string; caption: string; youtubeId: string; frames: string[]; placeholder?: boolean }
 > = {
   professional: {
     title: 'Reel 2026',
-    caption: 'The 2026 motion reel is in the edit. Until then, play the Advaita ’23 aftermovie.',
+    caption: 'The 2026 motion reel is in the edit. Until then, this plays the Advaita ’23 aftermovie.',
     youtubeId: 'tfCacIMaZCA',
     placeholder: true,
     frames: [
@@ -425,32 +409,36 @@ export const showreel: Record<
       '/work/posters/barneyysku.webp',
       yt('bwCilIeiXgI'),
       '/work/posters/jaiyash-fadedxfalak.webp',
+      yt('f5Wfqm7FQXY'),
+      '/work/posters/urban-decay.webp',
+      yt('fdktP0hqxIM'),
+      '/work/posters/gojo-poster.webp',
     ],
   },
   personal: {
     title: 'Roshni Ver.02',
     caption: 'Latest drop: a visual edit for Roshni by Awwn1k & Yungsta.',
     youtubeId: 'bwCilIeiXgI',
-    frames: [
-      yt('bwCilIeiXgI'),
-      '/work/posters/untitled-rdrg1.webp',
-      yt('fdktP0hqxIM'),
-      '/work/posters/c-est-la-vie.webp',
-      yt('f5Wfqm7FQXY'),
-      '/work/posters/fxxxx-club-grunge.webp',
-      yt('5T9cB8_QUjc'),
-      '/work/posters/new-project-49-6070df3.webp',
-    ],
+    frames: [yt('bwCilIeiXgI'), yt('fdktP0hqxIM'), yt('f5Wfqm7FQXY'), yt('5T9cB8_QUjc')],
   },
 };
 
-export type TimelineItem = { year: string; title: string; org: string; note: string; current?: boolean };
+export type TimelineItem = {
+  year: string;
+  title: string;
+  org: string;
+  note: string;
+  current?: boolean;
+  /** Years on the timeline ruler (experience only). */
+  span?: [number, number];
+};
 
 export const experience: TimelineItem[] = [
   {
     year: 'Now',
     title: 'Motion Designer',
     org: 'IDK Show',
+    span: [2026, 2026],
     note: 'Motion graphics for a YouTube show about AI and the future.',
     current: true,
   },
@@ -458,42 +446,49 @@ export const experience: TimelineItem[] = [
     year: '2025',
     title: 'Marketing Ops Intern',
     org: 'Tidyhire',
+    span: [2025, 2025],
     note: 'A hybrid of marketing operations and visual design.',
   },
   {
     year: '2025',
     title: 'Creative Associate',
     org: 'Astrix',
+    span: [2025, 2025],
     note: 'Integrated campaigns pulling every discipline together.',
   },
   {
     year: '2024',
     title: 'Creative Lead',
     org: 'Fastrbuild',
+    span: [2024, 2024],
     note: 'First leadership role, owning creative strategy for the brand.',
   },
   {
     year: '2023',
     title: 'Freelance',
     org: 'Independent practice',
+    span: [2023, 2023],
     note: '20+ clients and 5+ brands across edit, motion and design.',
   },
   {
     year: '2023',
     title: 'Media Coordinator',
     org: 'D3 Fest',
+    span: [2023, 2023],
     note: "Ran media for Odisha's largest techno-cultural fest.",
   },
   {
     year: '2023',
     title: 'Creative Contributor',
     org: 'Advaita, IIIT Bhubaneswar',
+    span: [2023, 2023],
     note: 'Three years on the flagship fest, aftermovie included.',
   },
   {
     year: '2022',
     title: 'Core Team',
     org: 'Photography & Tech Society',
+    span: [2022, 2022],
     note: 'From member to core team, shooting and editing for campus.',
   },
 ];
@@ -633,12 +628,20 @@ export const notes = [
   },
 ];
 
-export const nav = [
-  { label: 'Work', href: '/#work' },
-  { label: 'About', href: '/#about' },
-  { label: 'Archive', href: '/work' },
-  { label: 'Writing', href: '/blog' },
-  { label: 'Contact', href: '/#contact' },
-];
+export const nav: Record<Mode, { label: string; href: string }[]> = {
+  professional: [
+    { label: 'Work', href: '/#timeline' },
+    { label: 'About', href: '/#about' },
+    { label: 'Archive', href: '/work' },
+    { label: 'Writing', href: '/blog' },
+    { label: 'Contact', href: '/#contact' },
+  ],
+  personal: [
+    { label: 'Board', href: '/#board' },
+    { label: 'Receipt', href: '/#receipt' },
+    { label: 'Writing', href: '/blog' },
+    { label: 'Say hi', href: '/#contact' },
+  ],
+};
 
 export const projectsFor = (mode: Mode) => projects.filter((p) => p.modes.includes(mode));

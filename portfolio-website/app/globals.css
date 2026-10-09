@@ -3,41 +3,39 @@
 @tailwind utilities;
 
 /*
- * Two palettes, one switch. Every colour on the site is a token, so flipping
- * html[data-mode] re-skins the whole thing. Values are RGB channels so Tailwind
- * opacity modifiers (bg-fg/10) keep working.
+ * Two personalities, one switch. Professional is a calm edit suite on bone
+ * paper; Personal is a loud after-hours board. Colours are RGB channels so
+ * Tailwind opacity modifiers (bg-fg/10) keep working.
  */
 :root,
 html[data-mode='professional'] {
-  --bg: 236 233 226; /* bone */
-  --fg: 14 14 14; /* ink */
-  --muted: 108 104 97;
-  --line: 14 14 14;
-  --surface: 225 221 212;
-  --accent: 255 74 28; /* signal orange */
-  --accent-ink: 14 14 14;
-  --grain-opacity: 0.06;
+  --bg: 238 236 231; /* bone */
+  --fg: 17 17 17; /* ink */
+  --muted: 92 89 84; /* 6.2:1 on bone */
+  --line: 17 17 17;
+  --surface: 226 223 216;
+  --accent: 255 72 22; /* signal orange */
+  --accent-ink: 17 17 17;
   color-scheme: light;
 }
 
 html[data-mode='personal'] {
-  --bg: 10 10 11;
-  --fg: 236 232 223;
-  --muted: 139 135 126;
-  --line: 236 232 223;
-  --surface: 22 22 24;
+  --bg: 11 11 12;
+  --fg: 240 236 226;
+  --muted: 160 156 146; /* 7.4:1 on near black */
+  --line: 240 236 226;
+  --surface: 24 24 26;
   --accent: 200 255 46; /* acid lime */
-  --accent-ink: 10 10 11;
-  --grain-opacity: 0.09;
+  --accent-ink: 11 11 12;
   color-scheme: dark;
 }
 
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
-    text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-kerning: normal;
   }
 
   html.lenis,
@@ -55,11 +53,16 @@ html[data-mode='personal'] {
   }
 
   body {
-    @apply bg-bg font-sans text-fg;
-    font-variation-settings: 'wdth' 100;
-    transition:
-      background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-      color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    @apply bg-bg font-sans text-[17px] leading-relaxed text-fg;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
 
   ::selection {
@@ -71,39 +74,26 @@ html[data-mode='personal'] {
     outline: 2px solid rgb(var(--accent));
     outline-offset: 3px;
   }
-
-  @media (hover: hover) and (pointer: fine) {
-    html.has-cursor,
-    html.has-cursor * {
-      cursor: none !important;
-    }
-  }
 }
 
 @layer components {
   .shell {
-    @apply mx-auto w-full max-w-[1680px] px-4 sm:px-6 md:px-10;
+    @apply mx-auto w-full max-w-[1560px] px-4 sm:px-6 md:px-10;
   }
 
-  .label {
-    @apply font-mono text-[11px] uppercase leading-none tracking-[0.12em];
+  /* Professional: timecode-style labels, readable at 12px. */
+  .tc {
+    @apply font-mono text-[12px] uppercase leading-none tracking-[0.06em];
+    font-variant-numeric: tabular-nums;
   }
 
-  .hairline {
-    @apply border-line/15;
+  /* Personal: typewriter captions. */
+  .tw {
+    @apply font-type text-[12px] uppercase leading-snug tracking-[0.04em];
   }
 
-  /* Wide, heavy display type that can stretch per letter. */
-  .display {
-    @apply font-display font-extrabold uppercase;
-    font-variation-settings: 'wdth' 112;
-  }
-
-  .line-mask {
-    display: block;
-    overflow: hidden;
-    padding-bottom: 0.06em;
-    margin-bottom: -0.06em;
+  .poster {
+    @apply font-poster uppercase;
   }
 
   .link-underline {
@@ -127,25 +117,20 @@ html[data-mode='personal'] {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  .text-balance {
-    text-wrap: balance;
-  }
 }
 
-html[data-seen='1'] .preloader {
-  display: none;
-}
-
-/* Film grain over everything. Pure CSS, no image request. */
-.grain {
+/*
+ * Grain only on the personal side. A static, viewport-sized tile: no
+ * animation and no oversized layer, so it costs one composite and nothing per frame.
+ */
+html[data-mode='personal'] body::after {
+  content: '';
   pointer-events: none;
   position: fixed;
-  inset: -50%;
+  inset: 0;
   z-index: 60;
-  width: 200%;
-  height: 200%;
-  opacity: var(--grain-opacity);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {

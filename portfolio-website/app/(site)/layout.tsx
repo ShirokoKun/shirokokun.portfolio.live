@@ -1,14 +1,12 @@
-import Nav from '@/components/site/Nav';
-import Footer from '@/components/site/Footer';
-import Preloader from '@/components/ui/Preloader';
+import StatusBar from '@/components/site/StatusBar';
+import PageFooter from '@/components/site/PageFooter';
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Preloader />
-      <Nav />
+      <StatusBar />
       <main id="main">{children}</main>
-      <Footer />
+      <PageFooter />
     </>
   );
 }

@@ -25,8 +25,10 @@ export default function Cover({
         <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-accent" aria-hidden />
         {!bare && (
           <>
-            <span className="label relative text-bg/60">{project.year}</span>
-            <span className="display relative text-[clamp(1.5rem,3vw,2.75rem)] leading-[0.9]">{project.title}</span>
+            <span className="tc relative text-bg/60">{project.year}</span>
+            <span className="relative text-[clamp(1.5rem,3vw,2.75rem)] font-semibold leading-[0.95] tracking-[-0.03em]">
+              {project.title}
+            </span>
           </>
         )}
       </div>

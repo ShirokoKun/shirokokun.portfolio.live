@@ -16,15 +16,23 @@ const config: Config = {
         'accent-ink': token('accent-ink'),
       },
       fontFamily: {
-        sans: ['var(--font-archivo)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-archivo)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-instrument)', 'Georgia', 'serif'],
+        // Professional: a precise grotesk, a timecode mono and a serif voice.
+        sans: ['var(--font-inter-tight)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+        serif: ['var(--font-instrument)', 'Georgia', 'serif'],
+        // Personal: condensed poster caps and a typewriter mono.
+        poster: ['var(--font-anton)', 'Impact', 'sans-serif'],
+        type: ['var(--font-space-mono)', 'ui-monospace', 'monospace'],
       },
       fontSize: {
-        mega: ['clamp(4.5rem, 17vw, 19rem)', { lineHeight: '0.82', letterSpacing: '-0.04em' }],
-        huge: ['clamp(2.25rem, 9vw, 9.5rem)', { lineHeight: '0.88', letterSpacing: '-0.035em' }],
-        big: ['clamp(2.25rem, 5vw, 5rem)', { lineHeight: '0.95', letterSpacing: '-0.03em' }],
+        // Professional scale: three steps, mixed case, tight but never touching.
+        'pro-hero': ['clamp(3rem, 8.2vw, 9.5rem)', { lineHeight: '0.92', letterSpacing: '-0.05em' }],
+        'pro-xl': ['clamp(2.75rem, 6.4vw, 7.25rem)', { lineHeight: '0.94', letterSpacing: '-0.045em' }],
+        'pro-lg': ['clamp(2rem, 3.6vw, 3.75rem)', { lineHeight: '1', letterSpacing: '-0.035em' }],
+        'pro-md': ['clamp(1.25rem, 1.6vw, 1.625rem)', { lineHeight: '1.25', letterSpacing: '-0.015em' }],
+        // Personal scale: poster caps that are meant to be huge.
+        'poster-xl': ['clamp(5rem, 19vw, 21rem)', { lineHeight: '0.8', letterSpacing: '-0.01em' }],
+        'poster-lg': ['clamp(3rem, 8vw, 8.5rem)', { lineHeight: '0.85', letterSpacing: '0' }],
       },
       transitionTimingFunction: {
         expo: 'cubic-bezier(0.16, 1, 0.3, 1)',
@@ -32,17 +40,9 @@ const config: Config = {
       },
       keyframes: {
         blink: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.2' } },
-        grain: {
-          '0%, 100%': { transform: 'translate(0, 0)' },
-          '20%': { transform: 'translate(-3%, 2%)' },
-          '40%': { transform: 'translate(2%, -3%)' },
-          '60%': { transform: 'translate(-2%, -1%)' },
-          '80%': { transform: 'translate(3%, 3%)' },
-        },
       },
       animation: {
         blink: 'blink 1.4s ease-in-out infinite',
-        grain: 'grain 0.9s steps(4) infinite',
       },
     },
   },

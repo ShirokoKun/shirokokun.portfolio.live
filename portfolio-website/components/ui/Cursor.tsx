@@ -90,7 +90,7 @@ export default function Cursor() {
       style={{ width: label ? 96 : link ? 44 : 12, height: label ? 96 : link ? 44 : 12 }}
     >
       <span
-        className="label whitespace-nowrap text-[10px] transition-opacity duration-300"
+        className="tc whitespace-nowrap text-[10px] transition-opacity duration-300"
         style={{ opacity: label ? 1 : 0 }}
       >
         {label}
