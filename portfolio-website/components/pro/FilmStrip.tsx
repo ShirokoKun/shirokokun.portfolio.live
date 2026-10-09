@@ -1,38 +1,59 @@
 'use client';
 
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useEffect, useRef, useState } from 'react';
 import { gsap, ScrollTrigger, prefersReducedMotion, useIsoLayoutEffect } from '@/lib/motion';
+import { hasWebGL, useIdleReady, useInView } from '@/lib/webgl';
+
+// three.js only loads after first paint, and never for reduced motion or without WebGL.
+const FilmReel = dynamic(() => import('@/components/three/FilmReel'), { ssr: false });
 
 /**
- * A strip of 35mm film running under the hero. It drifts on its own, speeds up
- * with scroll velocity and pauses off screen. Transform-only, so it never
- * triggers layout. Clicking anywhere plays the reel.
+ * A strip of 35mm film running under the hero. The DOM strip renders first and
+ * stays as the fallback; once the page is idle a WebGL reel takes over in the
+ * same box (no layout shift) and the DOM drift stops. Clicking plays the reel.
  */
 export default function FilmStrip({ frames, label, onPlay }: { frames: string[]; label: string; onPlay: () => void }) {
   const wrap = useRef<HTMLButtonElement>(null);
   const track = useRef<HTMLDivElement>(null);
+  const drift = useRef<gsap.core.Tween | null>(null);
+  const idle = useIdleReady(600);
+  const inView = useInView(wrap);
+  const [canGL, setCanGL] = useState(false);
+  const [glOn, setGlOn] = useState(false);
+
+  useEffect(() => setCanGL(hasWebGL() && !prefersReducedMotion()), []);
 
   useIsoLayoutEffect(() => {
     const el = wrap.current;
     if (!el || !track.current || prefersReducedMotion()) return;
     const ctx = gsap.context(() => {
-      const drift = gsap.to(track.current, { xPercent: -50, duration: 70, ease: 'none', repeat: -1 });
+      const tween = gsap.to(track.current, { xPercent: -50, duration: 70, ease: 'none', repeat: -1 });
+      drift.current = tween;
       const boost = { v: 1 };
       ScrollTrigger.create({
         trigger: el,
         start: 'top bottom',
         end: 'bottom top',
-        onToggle: (self) => (self.isActive ? drift.play() : drift.pause()),
+        onToggle: (self) => (self.isActive && !tween.data ? tween.play() : tween.pause()),
         onUpdate: (self) => {
           boost.v = 1 + Math.min(Math.abs(self.getVelocity()) / 250, 8);
-          gsap.to(drift, { timeScale: boost.v, duration: 0.2, overwrite: true });
-          gsap.to(drift, { timeScale: 1, duration: 1.2, delay: 0.2, ease: 'power2.out' });
+          gsap.to(tween, { timeScale: boost.v, duration: 0.2, overwrite: true });
+          gsap.to(tween, { timeScale: 1, duration: 1.2, delay: 0.2, ease: 'power2.out' });
         },
       });
     }, el);
     return () => ctx.revert();
   }, []);
+
+  // Once WebGL is drawing, the DOM strip underneath stops moving.
+  useEffect(() => {
+    const t = drift.current;
+    if (!t || !glOn) return;
+    t.data = 'gl';
+    t.pause();
+  }, [glOn]);
 
   const loop = [...frames, ...frames];
 
@@ -52,6 +73,14 @@ export default function FilmStrip({ frames, label, onPlay }: { frames: string[];
         ))}
       </div>
       <Sprockets />
+      {canGL && idle && (
+        <div
+          className={`absolute inset-0 transition-opacity duration-700 ${glOn ? 'opacity-100' : 'opacity-0'}`}
+          aria-hidden
+        >
+          <FilmReel frames={frames} live={inView} onReady={() => setGlOn(true)} />
+        </div>
+      )}
       {/* Playhead */}
       <span className="pointer-events-none absolute inset-y-0 left-1/2 w-px bg-accent" aria-hidden />
       <span className="tc pointer-events-none absolute left-1/2 top-[22px] -translate-x-1/2 bg-accent px-2.5 py-1.5 text-accent-ink transition-transform duration-500 ease-expo group-hover:scale-110">

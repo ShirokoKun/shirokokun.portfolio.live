@@ -40,9 +40,11 @@ const config: Config = {
       },
       keyframes: {
         blink: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.2' } },
+        fadein: { from: { opacity: '0' }, to: { opacity: '1' } },
       },
       animation: {
         blink: 'blink 1.4s ease-in-out infinite',
+        fadein: 'fadein 1.2s ease-out both',
       },
     },
   },

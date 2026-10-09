@@ -1,10 +1,16 @@
 'use client';
 
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { modeCopy, projects } from '@/content/site';
 import MediaModal from '@/components/ui/MediaModal';
+import { prefersReducedMotion } from '@/lib/motion';
+import { hasWebGL, useIdleReady, useInView } from '@/lib/webgl';
+
+// three.js loads after first paint; reduced motion gets a single still frame.
+const AcidField = dynamic(() => import('@/components/three/AcidField'), { ssr: false });
 
 const copy = modeCopy.personal;
 const latest = projects.find((p) => p.id === 'roshni')!;
@@ -18,6 +24,12 @@ export default function PersonalHero() {
   const [playing, setPlaying] = useState(false);
   // A throw ends with a click event; ignore it so dragging the phone does not open it.
   const dragged = useRef(false);
+  const idle = useIdleReady(500);
+  const inView = useInView(area);
+  const [gl, setGl] = useState<null | { calm: boolean }>(null);
+  useEffect(() => {
+    if (hasWebGL()) setGl({ calm: prefersReducedMotion() });
+  }, []);
 
   const sticker = {
     drag: true,
@@ -30,6 +42,12 @@ export default function PersonalHero() {
 
   return (
     <section ref={area} aria-labelledby="hero-title" className="relative min-h-[100svh] overflow-hidden pt-12 md:pt-14">
+      {gl && idle && (
+        <div className="pointer-events-none absolute inset-0 animate-fadein" aria-hidden>
+          <AcidField ink="#c8ff2e" live={inView} calm={gl.calm} />
+        </div>
+      )}
+
       {/* The name, with a lime echo knocked out behind it */}
       <div className="pointer-events-none absolute inset-x-0 top-[16vh] select-none md:top-[12vh]">
         <motion.h1
